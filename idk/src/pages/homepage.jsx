@@ -2,6 +2,7 @@ import dots from "../assets/randomstatic.png"
 import bggallery from "../assets/images/gallery.png"
 import { motion } from "motion/react"
 import { useEffect, useState } from "react";
+import FlipText from "../components/flipText";
 
 function Homepage(){
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -68,7 +69,7 @@ function Homepage(){
                         }}
                     />
                 <h1 className="font-soria text-5xl text-white md:text-6xl xl:text-8xl text-center z-20"  >Wander through a <br/> world of  
-                <motion.span className="font-fsomething text-[#F1893A] "> expression</motion.span></h1>
+                <motion.span className="font-fsomething text-[#F1893A] "><FlipText text="expression"/></motion.span></h1>
                 <motion.svg className='absolute max-h-full w-[95%] md:w-[60%] lg:w-[50%] xl:w-[55%]'   viewBox="0 0 1006 443" fill="none" style={{ overflow: 'hidden' }}
                     xmlns="http://www.w3.org/2000/svg">
                     <motion.g variants={linesVariants} initial="hidden" animate="visible" className="  stroke-[#F1893A] stroke-4">
@@ -85,6 +86,7 @@ function Homepage(){
 
             <div className="flex flex-col items-center justify-center w-full max-w-full overflow-hidden p-12 px-10 md:p-14 lg:px-16 bg-linear-to-b from-[#232323] to-[#3E3C36] text-white lg:text-xl xl:text-2xl">
                 <p className="font-newsreader">Masterpieces by great artists are admired by many — but few truly know the stories behind them. What shaped their vision? What moments in their lives bled into the brushstrokes?</p>
+                
             </div>
         </div>
         
