@@ -2,7 +2,9 @@ import dots from "../assets/randomstatic.png"
 import bggallery from "../assets/images/gallery.png"
 import { motion } from "motion/react"
 import { useEffect, useState } from "react";
-import FlipText from "../components/flipText";
+import ArtistCard from "../components/artistCard";
+import Artists from "../sections/artist";
+import HoverFlipText from "../components/hoverFlipText";
 
 function Homepage(){
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -57,7 +59,7 @@ function Homepage(){
     const moveAmountY = (mousePosition.y / window.innerHeight - 0.5) * 100; 
 
     return(
-        <div className="flex items-center justify-center flex-col w-screen min-h-screen overflow-x-hidden">
+        <div className="flex items-center justify-center flex-col w-screen min-h-screen ">
             <div className="flex relative items-center justify-center w-full h-screen bg-[#232323] overflow-hidden " style={{backgroundImage: `url(${dots})`}}>
                 <img 
                     src={bggallery} 
@@ -69,7 +71,7 @@ function Homepage(){
                         }}
                     />
                 <h1 className="font-soria text-5xl text-white md:text-6xl xl:text-8xl text-center z-20"  >Wander through a <br/> world of  
-                <motion.span className="font-fsomething text-[#F1893A] "><FlipText text="expression"/></motion.span></h1>
+                <motion.span className="font-fsomething text-[#F1893A] "><HoverFlipText text="expression"/></motion.span></h1>
                 <motion.svg className='absolute max-h-full w-[95%] md:w-[60%] lg:w-[50%] xl:w-[55%]'   viewBox="0 0 1006 443" fill="none" style={{ overflow: 'hidden' }}
                     xmlns="http://www.w3.org/2000/svg">
                     <motion.g variants={linesVariants} initial="hidden" animate="visible" className="  stroke-[#F1893A] stroke-4">
@@ -88,6 +90,10 @@ function Homepage(){
                 <p className="font-newsreader">Masterpieces by great artists are admired by many — but few truly know the stories behind them. What shaped their vision? What moments in their lives bled into the brushstrokes?</p>
                 
             </div>
+
+            <Artists/>
+            <div>
+                hi bye</div>
         </div>
         
         
