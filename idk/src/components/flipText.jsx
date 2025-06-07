@@ -5,15 +5,16 @@ function FlipText({text}) {
     const STAGGERED = 0.025;
 
     return (
-            <motion.div initial="initial" whileHover="hovered" className="relative  overflow-hidden block whitespace-nowrap  capitalize" style={{lineHeight:0.9}} >
+            <motion.div initial="initial" animate="final" className="relative  overflow-hidden block whitespace-nowrap  " style={{lineHeight:0.9}} >
                 <div>
                     {text.split("").map((l, i) => (
                         <motion.span 
                         variants={{
                             "initial": {
-                                y:0
+                                y:0,
+                                
                             },
-                            "hovered":{
+                            "final":{
                                 y:"-100%"
                             }
                         }}
@@ -37,7 +38,7 @@ function FlipText({text}) {
                             "initial": {
                                 y:"100%"
                             },
-                            "hovered":{
+                            "final":{
                                 y:0
                             }
                             }}
