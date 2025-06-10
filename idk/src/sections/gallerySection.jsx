@@ -193,10 +193,10 @@ function Gallery(){
                 />
                 <img
                 src={lines}
-                className='absolute rotate-180 top-[-100px] left-[-100px]'
+                className='absolute z-0 rotate-180 top-[-100px] left-[-100px]'
                 />
                 {/* card */}
-                <div className='z-20 w-[300px] md:w-[400px] lg:w-[500px] p-2 md:p-4  bg-white'>
+                <div className='z-20 w-[300px] md:w-[400px] lg:w-[500px] p-2 md:p-4 bg-white'>
                     <canvas 
                         ref={canvasRef}
                         className='pb-2 max-w-full h-auto'
@@ -210,12 +210,25 @@ function Gallery(){
                 </div>
 
                 {/* details */}
-                <div className='hidden lg:block w-[400px] h-[400px] md:ml-8 p-6 bg-white/90 backdrop-blur-sm rounded-lg'>
+                <div className='hidden font-newsreader z-50 lg:block w-[400px] h-[400px] md:ml-8 p-6 bg-white/90 rounded-lg rounded-br-[100px]'>
                     <h2 className='text-2xl font-bold mb-2 text-gray-800'>{artworks[currentId].title}</h2>
                     <p className='text-lg mb-4 text-gray-700'>{artworks[currentId].artist}, {artworks[currentId].year}</p>
                     <p className='text-sm leading-relaxed text-gray-600'>{artworks[currentId].description}</p>
                 </div>
+                { currentId === artworks.length-1 && 
+                <motion.div 
+                    className={`z-20 p-2 absolute bottom-5 text-white border-white border rounded-full transition-all`} 
+                    style={{backgroundColor: dominantColors[1]}}
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    >
+                        <p >by Niharika.</p>
+                </motion.div>
+                }
+                
+            
             </motion.div>
+
         </div>
     )
 }
@@ -229,7 +242,7 @@ const artworks = [
         title: "The Starry Nights",
         artist: "Vincent Van Gogh",
         year: 1889,
-        description: '"The Starry Nights" is a renowned oil painting by Dutch Post-Impressionist painter Vincent van Gogh, created in June 1889. The painting depicts a view from the east-facing window of his asylum room in Saint-Rémy-de-Provence, just before sunrise, and includes an imaginative village. It is now housed at the Museum of Modern Art in New York'
+        description: '"The Starry Nights" is a renowned oil painting by Dutch Post-Impressionist painter Vincent van Gogh, created in June 1889. The painting depicts a view from the east-facing window of his asylum room in Saint-Rémy-de-Provence, just before sunrise, and includes an imaginative village. It is now housed at the Museum of Modern Art in New York.'
     },
     {
         id: 1,
@@ -245,7 +258,7 @@ const artworks = [
         title: "Bride's Toilet",
         artist: "Amrita Sher-Gil",
         year: 1937,
-        description: "A work of modernism,the painting draws influence from the frescoes of Ajanta and the miniatures of Mughal art, thereby resulting in a masterful amalgam of Indian and European styles. Bride's Toilet depicts a bride's chamber,[8] wherein a young light-skinned woman, presumably the titular bride, is seated. She is half-naked; her palms are covered in mehndi.She is surrounded by two other women and two children.Their faces are expressionless.Tones have been skilfully used. The painting demonstrates Sher-Gil's curious interest in women, their lives and adversities."
+        description: "A work of modernism, the painting draws influence from the frescoes of Ajanta and the miniatures of Mughal art, thereby resulting in a masterful amalgam of Indian and European styles. Bride's Toilet depicts a bride's chamber, wherein a young light-skinned woman, presumably the titular bride, is seated. She is half-naked; her palms are covered in mehndi. She is surrounded by two other women and two children. Their faces are expressionless. Tones have been skilfully used. The painting demonstrates Sher-Gil's curious interest in women, their lives and adversities."
     },
     {
         id: 3,

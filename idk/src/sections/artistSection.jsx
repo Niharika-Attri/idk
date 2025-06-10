@@ -18,10 +18,10 @@ function Artists(){
     const indexProgress = useTransform(scrollYProgress, [0, 1], [0, data.length-1])
 
     useEffect(() => {
-        const unsubscribe = indexProgress.onChange((value) => {
+        const unsubscribe = indexProgress.on("change",((value) => {
             const newIndex = Math.round(value);
             setCurrentId(newIndex);
-            });
+            }))
             return () => unsubscribe();
         }, [indexProgress]);
 
