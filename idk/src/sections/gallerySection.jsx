@@ -3,33 +3,138 @@ import starryNights from '../assets/images/starrynight.png'
 import womanWithParasol from '../assets/images/womanwiththeparasol.png'
 import theBridesToilet from '../assets/images/thebridestoilet.png'
 import shakuntalaPatra from '../assets/images/shakuntalapatralekhan.png'
-import { useRef, useState } from 'react'
+import lines from '../assets/somelines.svg'
+import { useRef, useState, useEffect } from 'react'
+import { useScroll, useTransform } from 'motion/react'
+import { motion } from 'motion/react'
 
 function Gallery(){
-    const ref = useRef(null)
-    const [currentId, setCurrentId] = useState(3)
+    const canvasRef = useRef(null)
+    const [currentId, setCurrentId] = useState(0)
+    const [canvasDimensions, setCanvasDimensions] = useState({ width: 0, height: 0 })
+    const [dominantColors, setDominantColors] = useState(['#fbbf24', '#f59e0b']) // default amber gradient
+
+    const targetRef = useRef(null)
+    const {scrollYProgress} = useScroll({
+        target: targetRef
+    })
+    const indexProgress = useTransform(scrollYProgress, [0,1], [0, artworks.length-1])
+    
+    useEffect(() => {
+        const unsubscribe = indexProgress.on('change', (value) => {
+            const newIndex = Math.round(value)
+            if (newIndex !== currentId && newIndex >= 0 && newIndex < artworks.length) {
+                setCurrentId(newIndex)
+            }
+        })
+        
+        return unsubscribe
+    }, [indexProgress, currentId])
+
+    // Function to extract 2 dominant colors from canvas
+    const extractDominantColors = (canvas) => {
+        const ctx = canvas.getContext('2d')
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+        const data = imageData.data
+        
+        const colorMap = {}
+        
+        // Sample every 10th pixel for performance
+        for (let i = 0; i < data.length; i += 200) {
+            const r = data[i]
+            const g = data[i + 1]
+            const b = data[i + 2]
+            const alpha = data[i + 3]
+            
+            // Skip transparent pixels
+            if (alpha < 125) continue
+            
+            // Group similar colors (reduce precision)
+            const key = `${Math.floor(r/15)*15},${Math.floor(g/15)*15},${Math.floor(b/15)*15}`
+            colorMap[key] = (colorMap[key] || 0) + 1
+        }
+        
+        // Sort colors by frequency and get top 2
+        const sortedColors = Object.entries(colorMap)
+            .sort(([,a], [,b]) => b - a)
+            .slice(0, 2)
+        
+        if (sortedColors.length >= 2) {
+            return [
+                `rgb(${sortedColors[0][0]})`,
+                `rgb(${sortedColors[1][0]})`
+            ]
+        } else if (sortedColors.length === 1) {
+            // If only one dominant color, create a slightly darker variant
+            const [r, g, b] = sortedColors[0][0].split(',').map(Number)
+            return [
+                `rgb(${r},${g},${b})`,
+                `rgb(${Math.max(0, r-30)},${Math.max(0, g-30)},${Math.max(0, b-30)})`
+            ]
+        }
+        
+        return ['59,130,246', '37,99,235'] // default blue gradient
+    }
+
+    // Load image and draw on canvas
+    useEffect(() => {
+        const canvas = canvasRef.current
+        if (!canvas) return
+
+        const ctx = canvas.getContext('2d')
+        const img = new Image()
+        
+        img.onload = () => {
+            // Set canvas dimensions to match image
+            canvas.width = img.width
+            canvas.height = img.height
+            setCanvasDimensions({ width: img.width, height: img.height })
+            
+            // Clear canvas and draw image
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+            ctx.drawImage(img, 0, 0)
+            
+            // Extract dominant colors after image is drawn
+            setTimeout(() => {
+                const colors = extractDominantColors(canvas)
+                setDominantColors(colors)
+            }, 100)
+        }
+        
+        img.src = artworks[currentId].img
+    }, [currentId])
+    
     return(
-        <div className="relative h-[400vh] w-screen bg-[#232323]">
-            <div className='sticky flex items-center justify-center top-0 h-screen w-screen bg-amber-400'>
+        <div ref={targetRef} className="relative h-[400vh] w-screen bg-[#232323]">
+            <motion.div 
+                className='sticky flex  items-center justify-center top-0 h-screen w-screen transition-all duration-800 ease-out'
+                animate={{ 
+                    background: `linear-gradient(135deg, ${dominantColors[0]} 0%, ${dominantColors[1]} 100%)`
+                }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                
+            >
                 {/* card */}
                 <div className='w-[300px] md:w-[400px] lg:w-[500px] p-2 md:p-4  bg-white'>
-                    <img 
-                        ref={ref}
-                        className='pb-2'
-                        src={artworks[currentId].img}
-                        />
+                    <canvas 
+                        ref={canvasRef}
+                        className='pb-2 max-w-full h-auto'
+                        style={{
+                            maxWidth: '100%',
+                            height: 'auto'
+                        }}
+                    />
                     <p>{artworks[currentId].artist}</p>
                     <p>{artworks[currentId].year}</p>
                 </div>
 
                 {/* details */}
-                <div className='w-[300px]'>
-                    <h2>{artworks[currentId].title}</h2>
-                    <p>{artworks[currentId].artist}, {artworks[currentId].year}</p>
-                    <p>{artworks[currentId].description}</p>
-
+                <div className='hidden lg:block w-[400px] h-[400px] md:ml-8 p-6 bg-white/90 backdrop-blur-sm rounded-lg'>
+                    <h2 className='text-2xl font-bold mb-2 text-gray-800'>{artworks[currentId].title}</h2>
+                    <p className='text-lg mb-4 text-gray-700'>{artworks[currentId].artist}, {artworks[currentId].year}</p>
+                    <p className='text-sm leading-relaxed text-gray-600'>{artworks[currentId].description}</p>
                 </div>
-            </div>
+            </motion.div>
         </div>
     )
 }
@@ -51,7 +156,7 @@ const artworks = [
         title: "Woman with a Parasol - Madame Monet and Her Son",
         artist: "Claude Monet",
         year: 1875,
-        description: 'The artist’s wife Camille stands on a hill with their son Jean behind her. Monet worked quickly to record this moment. Sketching the sky in chaotic strokes of blue and gray, he left areas of canvas exposed in his haste. The grass is more densely painted in short brushstrokes of green, blue, and brown. Small dabs of yellow suggest buttercups, and the color is reflected on Camille’s sleeve. The dense slashes of brilliant white on the back of her skirt and jacket catch the light. Completed in a single outdoor session, this is a celebration of color and light.'
+        description: "The artist's wife Camille stands on a hill with their son Jean behind her. Monet worked quickly to record this moment. Sketching the sky in chaotic strokes of blue and gray, he left areas of canvas exposed in his haste. The grass is more densely painted in short brushstrokes of green, blue, and brown. Small dabs of yellow suggest buttercups, and the color is reflected on Camille's sleeve. The dense slashes of brilliant white on the back of her skirt and jacket catch the light. Completed in a single outdoor session, this is a celebration of color and light."
     },
     {
         id: 2,
