@@ -1,4 +1,4 @@
-import aboutframes from '../assets/images/aboutframes.png'
+import aboutframes from '../assets/images/aboutFrames.png'
 import drawnRoads from '../assets/images/drawn road.png'
 
 function About(){
