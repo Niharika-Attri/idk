@@ -122,6 +122,8 @@ function Artists(){
                     </div>
                     <p className="font-newsreader text-sm pt-10 text-white">Scroll down</p>
                     <img className="w-3" src={downArrows}/>
+
+                    
                 </div>  
 
         </div>

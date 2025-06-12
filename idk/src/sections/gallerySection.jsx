@@ -7,6 +7,7 @@ import lines from '../assets/somelines.svg'
 import { useRef, useState, useEffect } from 'react'
 import { useScroll, useTransform } from 'motion/react'
 import { motion } from 'motion/react'
+import {Link} from 'react-router-dom'
 
 function Gallery(){
     const canvasRef = useRef(null)
@@ -19,6 +20,7 @@ function Gallery(){
         target: targetRef
     })
     const indexProgress = useTransform(scrollYProgress, [0,1], [0, artworks.length-1])
+    
     
     useEffect(() => {
         const unsubscribe = indexProgress.on('change', (value) => {
@@ -214,6 +216,7 @@ function Gallery(){
                     <h2 className='text-2xl font-bold mb-2 text-gray-800'>{artworks[currentId].title}</h2>
                     <p className='text-lg mb-4 text-gray-700'>{artworks[currentId].artist}, {artworks[currentId].year}</p>
                     <p className='text-sm leading-relaxed text-gray-600'>{artworks[currentId].description}</p>
+                    <Link to="/artwork">Explore more</Link>
                 </div>
                 { currentId === artworks.length-1 && 
                 <motion.div 
@@ -226,8 +229,16 @@ function Gallery(){
                 </motion.div>
                 }
                 
+                <motion.button
+                        className="absolute z-50 bottom-10 right-30 md:right-50 px-4 py-1 bg-[#F1893A] text-white font-newsreader rounded-full shadow-lg shadow-black/80 hover:bg-[#f1713a] hover:border"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        initial={{x:100}}
+                        ></motion.button>
             
             </motion.div>
+
+           
 
         </div>
     )
