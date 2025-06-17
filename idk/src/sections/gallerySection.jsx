@@ -101,12 +101,12 @@ function Gallery(){
                 </motion.div>
                 }
                 
-                <motion.button
+                {/* <motion.button
                         className="absolute z-50 bottom-10 right-30 md:right-50 px-4 py-1 bg-[#F1893A] text-white font-newsreader rounded-full shadow-lg shadow-black/80 hover:bg-[#f1713a] hover:border"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         initial={{x:100}}
-                        ></motion.button>
+                        ></motion.button> */}
             
             </motion.div>
 
